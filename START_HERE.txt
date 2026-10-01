@@ -1,0 +1,58 @@
+KNIFE NINJA — LEVEL 1 READY PROJECT (Unity 6)
+Developed by Ishan, Ayush & Meheraj
+================================================
+
+UNITY VERSION
+- Unity 6.5 / 6000.5.10f1
+- Universal 2D / URP project
+
+OPEN THE PROJECT
+1. Extract the ZIP completely.
+2. Open Unity Hub.
+3. Projects > Add > Add project from disk.
+4. Select THIS folder: KnifeNinja-main
+   It must contain Assets, Packages, and ProjectSettings.
+5. Open with Unity 6000.5.10f1.
+6. WAIT for Unity to finish importing and compiling.
+
+AUTOMATIC LEVEL SETUP
+- On the first successful script compile, the editor setup script automatically builds the polished Level 1 and opens:
+  Assets/Scenes/Level1.unity
+- If Unity opens an Untitled scene first, wait until compilation finishes.
+- If Level1 is not automatically built/opened, use:
+  Tools > Knife Ninja > Build Polished Level 1
+- Then double-click:
+  Assets/Scenes/Level1.unity
+
+PLAY
+- Click Play.
+- A / D : Move
+- Space : Jump
+- F : Throw knife
+
+LEVEL 1 CONTENT
+- Animated ninja: Idle / Run / Jump / Throw
+- Side-scrolling camera
+- Polished 2D tilemap platforms
+- Moonlit forest / mountain background
+- Spikes and pits
+- Moving platforms
+- Patrol enemies
+- 3 destructible targets
+- Coins
+- Knife refill crates
+- Shrine gate finish
+- HP, knives, coins, targets HUD
+- Sounds, music, particles, lantern/firefly atmosphere
+- Original Level1 backed up as Level1_Original.unity when rebuilt
+- In-game credits: Ishan, Ayush & Meheraj
+
+IMPORTANT
+- Do NOT create a new Unity project.
+- Do NOT open only the Assets folder.
+- Add the KnifeNinja-main folder itself from Unity Hub.
+- If there are red Console errors, send a screenshot of the first red error.
+
+ASSET NOTE
+- Ninja character animation art is based on the 10KStudios character pack supplied with the project source materials.
+- Additional Level 1 environment/UI/audio assets are included in this project package.

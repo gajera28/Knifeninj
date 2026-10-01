@@ -1,0 +1,46 @@
+READY PROJECT CHECKLIST
+=======================
+Required project folders:
+- Assets/
+- Packages/
+- ProjectSettings/
+
+Key scene:
+- Assets/Scenes/Level1.unity
+
+Auto-builder:
+- Assets/Editor/KnifeNinjaPolishSetup.cs
+
+Core scripts:
+- Assets/Scripts/PlayerMovement.cs
+- Assets/Scripts/PlayerThrow.cs
+- Assets/Scripts/Knife.cs
+- Assets/Scripts/PlayerHealth.cs
+- Assets/Scripts/EnemyPatrol.cs
+- Assets/Scripts/TargetDummy.cs
+- Assets/Scripts/MovingPlatform.cs
+- Assets/Scripts/Hazard.cs
+- Assets/Scripts/CollectibleCoin.cs
+- Assets/Scripts/KnifePickup.cs
+- Assets/Scripts/LevelExit.cs
+- Assets/Scripts/LevelHUD.cs
+- Assets/Scripts/Level1GameManager.cs
+- Assets/Scripts/CameraFollow2D.cs
+- Assets/Scripts/KnifeNinjaAudio.cs
+- Assets/Scripts/VFXBurst.cs
+
+Polished visual assets:
+- Assets/Resources/Level1Art/
+
+Audio:
+- Assets/Resources/Audio/
+
+Team credits:
+- Ishan
+- Ayush
+- Meheraj
+
+Asset integrity fix:
+- Replaced Git LFS pointer placeholders for ninja animation PNGs with the actual supplied image files.
+- Replaced Ground/Ninja.png with an actual ninja sprite image.
+- Ground grass/dirt fallback PNGs are included as real image files.
