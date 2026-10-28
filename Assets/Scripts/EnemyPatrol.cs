@@ -8,6 +8,7 @@ public class EnemyPatrol : MonoBehaviour
 
     private Vector2 target;
     private SpriteRenderer spriteRenderer;
+    private bool defeated;
 
     void Start()
     {
@@ -35,16 +36,28 @@ public class EnemyPatrol : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (defeated)
+            return;
+
         Knife knife = other.GetComponent<Knife>();
         if (knife != null)
         {
+            // Destroy is delayed to the end of the frame, so a second knife
+            // in the same frame would otherwise score this enemy twice.
+            defeated = true;
             Level1GameManager.Instance?.EnemyDefeated();
             KnifeNinjaAudio.Instance?.PlayHit();
             VFXBurst.Spawn(transform.position, new Color(0.85f, 0.16f, 0.22f), 18);
             Destroy(other.gameObject);
             Destroy(gameObject);
-            return;
         }
+    }
+
+    // Stay so the player keeps taking damage while touching the enemy.
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (defeated)
+            return;
 
         PlayerHealth health = other.GetComponent<PlayerHealth>();
         if (health != null)

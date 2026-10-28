@@ -5,7 +5,9 @@ public class Hazard : MonoBehaviour
     public bool instantKill;
     public int damage = 1;
 
-    void OnTriggerEnter2D(Collider2D other)
+    // Stay (not Enter) so a player still standing on spikes is hurt again
+    // once the invulnerability blink ends.
+    void OnTriggerStay2D(Collider2D other)
     {
         PlayerHealth health = other.GetComponent<PlayerHealth>();
         if (health == null)
