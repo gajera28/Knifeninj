@@ -10,11 +10,17 @@ public class Level1GameManager : MonoBehaviour
     public int TargetsDestroyed { get; private set; }
     public int Coins { get; private set; }
     public int Score { get; private set; }
+    public float ElapsedTime { get; private set; }
+    public int TimeBonus { get; private set; }
     public bool LevelComplete { get; private set; }
 
     public const int TargetPoints = 100;
     public const int EnemyPoints = 50;
     public const int CoinPoints = 10;
+
+    // Finishing under ParTime earns BonusPerSecond for every second saved.
+    public const float ParTime = 120f;
+    public const int BonusPerSecond = 5;
 
     [SerializeField] private LevelHUD hud;
     [SerializeField] private GameObject gateBarrier;
@@ -37,6 +43,9 @@ public class Level1GameManager : MonoBehaviour
 
     void Update()
     {
+        if (!LevelComplete)
+            ElapsedTime += Time.deltaTime;
+
         if (LevelComplete &&
             Keyboard.current != null &&
             Keyboard.current.rKey.wasPressedThisFrame)
@@ -127,8 +136,14 @@ public class Level1GameManager : MonoBehaviour
         if (LevelComplete)
             return;
 
+        TimeBonus = Mathf.Max(
+            0,
+            Mathf.RoundToInt((ParTime - ElapsedTime) * BonusPerSecond)
+        );
+        Score += TimeBonus;
+
         LevelComplete = true;
         KnifeNinjaAudio.Instance?.PlayWin();
-        hud?.ShowWin(Coins, Score);
+        hud?.ShowWin(Coins, Score, ElapsedTime, TimeBonus);
     }
 }
