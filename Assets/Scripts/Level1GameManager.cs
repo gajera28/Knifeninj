@@ -9,7 +9,12 @@ public class Level1GameManager : MonoBehaviour
     public int TargetsTotal { get; private set; }
     public int TargetsDestroyed { get; private set; }
     public int Coins { get; private set; }
+    public int Score { get; private set; }
     public bool LevelComplete { get; private set; }
+
+    public const int TargetPoints = 100;
+    public const int EnemyPoints = 50;
+    public const int CoinPoints = 10;
 
     [SerializeField] private LevelHUD hud;
     [SerializeField] private GameObject gateBarrier;
@@ -59,6 +64,7 @@ public class Level1GameManager : MonoBehaviour
     public void TargetDestroyed()
     {
         TargetsDestroyed++;
+        AddScore(TargetPoints);
 
         if (TargetsTotal > 0 &&
             TargetsDestroyed >= TargetsTotal)
@@ -84,6 +90,20 @@ public class Level1GameManager : MonoBehaviour
     public void AddCoin()
     {
         Coins++;
+        AddScore(CoinPoints);
+    }
+
+    public void EnemyDefeated()
+    {
+        AddScore(EnemyPoints);
+    }
+
+    public void AddScore(int points)
+    {
+        if (LevelComplete)
+            return;
+
+        Score += points;
     }
 
     public void TryCompleteLevel()
@@ -109,6 +129,6 @@ public class Level1GameManager : MonoBehaviour
 
         LevelComplete = true;
         KnifeNinjaAudio.Instance?.PlayWin();
-        hud?.ShowWin(Coins);
+        hud?.ShowWin(Coins, Score);
     }
 }

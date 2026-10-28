@@ -29,8 +29,29 @@ public class LevelHUD : MonoBehaviour
         if (titleText != null)
             titleText.text = "LEVEL 1  |  MOONLIT PASS";
 
+        // Shrink the status line to fit on one row now that it also shows the score.
+        if (statusText != null)
+        {
+            statusText.verticalOverflow = VerticalWrapMode.Truncate;
+            statusText.resizeTextForBestFit = true;
+            statusText.resizeTextMinSize = 18;
+            statusText.resizeTextMaxSize = statusText.fontSize;
+        }
+
         if (objectiveText != null)
+        {
             objectiveText.text = "Destroy every training target, then reach the shrine gate.";
+
+            // Make the objective stand out against the moon behind the panel.
+            objectiveText.fontStyle = FontStyle.Bold;
+            objectiveText.color = new Color(1f, 0.84f, 0.45f);
+            if (objectiveText.GetComponent<Shadow>() == null)
+            {
+                Shadow shadow = objectiveText.gameObject.AddComponent<Shadow>();
+                shadow.effectColor = new Color(0f, 0f, 0f, 0.85f);
+                shadow.effectDistance = new Vector2(2f, -2f);
+            }
+        }
 
         if (creditsText != null)
             creditsText.text = "Developed by Ishan, Ayush & Meheraj";
@@ -49,10 +70,11 @@ public class LevelHUD : MonoBehaviour
         int knives = thrower != null ? thrower.knivesRemaining : 0;
 
         statusText.text =
-            "HP " + hp +
-            "    KNIVES " + knives +
-            "    COINS " + gm.Coins +
-            "    TARGETS " + gm.TargetsDestroyed + "/" + gm.TargetsTotal;
+            "SCORE " + gm.Score +
+            "   HP " + hp +
+            "   KNIVES " + knives +
+            "   COINS " + gm.Coins +
+            "   TARGETS " + gm.TargetsDestroyed + "/" + gm.TargetsTotal;
     }
 
     public void ShowMessage(string text, float duration = 1.5f)
@@ -84,7 +106,7 @@ public class LevelHUD : MonoBehaviour
         messageRoutine = null;
     }
 
-    public void ShowWin(int coins)
+    public void ShowWin(int coins, int score)
     {
         if (winPanel != null)
             winPanel.SetActive(true);
@@ -94,7 +116,8 @@ public class LevelHUD : MonoBehaviour
 
         if (winDetailText != null)
             winDetailText.text =
-                "Moonlit Pass cleared\nCoins collected: " + coins +
+                "Moonlit Pass cleared\nFinal score: " + score +
+                "\nCoins collected: " + coins +
                 "\n\nDeveloped by Ishan, Ayush & Meheraj" +
                 "\nPress R to replay";
 
