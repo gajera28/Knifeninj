@@ -38,6 +38,7 @@ public class EnemyPatrol : MonoBehaviour
         Knife knife = other.GetComponent<Knife>();
         if (knife != null)
         {
+            Level1GameManager.Instance?.EnemyDefeated();
             KnifeNinjaAudio.Instance?.PlayHit();
             VFXBurst.Spawn(transform.position, new Color(0.85f, 0.16f, 0.22f), 18);
             Destroy(other.gameObject);
