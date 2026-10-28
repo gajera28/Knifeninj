@@ -66,6 +66,10 @@ public class LevelHUD : MonoBehaviour
         if (gm == null || statusText == null)
             return;
 
+        if (titleText != null)
+            titleText.text =
+                "LEVEL 1  |  MOONLIT PASS     TIME " + FormatTime(gm.ElapsedTime);
+
         int hp = health != null ? health.CurrentHealth : 0;
         int knives = thrower != null ? thrower.knivesRemaining : 0;
 
@@ -106,7 +110,7 @@ public class LevelHUD : MonoBehaviour
         messageRoutine = null;
     }
 
-    public void ShowWin(int coins, int score)
+    public void ShowWin(int coins, int score, float time, int timeBonus)
     {
         if (winPanel != null)
             winPanel.SetActive(true);
@@ -116,11 +120,19 @@ public class LevelHUD : MonoBehaviour
 
         if (winDetailText != null)
             winDetailText.text =
-                "Moonlit Pass cleared\nFinal score: " + score +
+                "Moonlit Pass cleared in " + FormatTime(time) +
+                "\nTime bonus: +" + timeBonus +
+                "\nFinal score: " + score +
                 "\nCoins collected: " + coins +
-                "\n\nDeveloped by Ishan, Ayush & Meheraj" +
+                "\nDeveloped by Ishan, Ayush & Meheraj" +
                 "\nPress R to replay";
 
         Time.timeScale = 0f;
+    }
+
+    public static string FormatTime(float seconds)
+    {
+        int total = Mathf.FloorToInt(seconds);
+        return (total / 60) + ":" + (total % 60).ToString("00");
     }
 }
