@@ -85,7 +85,7 @@ public class PlayerThrow : MonoBehaviour
         if (knivesRemaining <= 0)
         {
             Level1GameManager.Instance?.HUD?.ShowMessage(
-                "Out of knives - find an ammo crate!",
+                "Out of knives - find a crate or press R to respawn!",
                 1.6f
             );
             return;
@@ -108,6 +108,12 @@ public class PlayerThrow : MonoBehaviour
         knivesRemaining--;
         nextThrowTime = Time.time + throwCooldown;
         KnifeNinjaAudio.Instance?.PlayThrow();
+    }
+
+    public void RefillKnives()
+    {
+        knivesRemaining = maxKnives;
+        nextThrowTime = 0f;
     }
 
     public int AddKnives(int amount)

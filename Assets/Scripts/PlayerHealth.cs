@@ -91,6 +91,7 @@ public class PlayerHealth : MonoBehaviour
         transform.position = respawnPosition;
         rb.linearVelocity = Vector2.zero;
         CurrentHealth = maxHealth;
+        GetComponent<PlayerThrow>()?.RefillKnives();
 
         yield return new WaitForSeconds(0.35f);
 
