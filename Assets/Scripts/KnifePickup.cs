@@ -20,7 +20,7 @@ public class KnifePickup : MonoBehaviour
             );
             KnifeNinjaAudio.Instance?.PlayCoin();
             VFXBurst.Spawn(transform.position, new Color(0.5f, 0.9f, 1f), 12);
-            Destroy(gameObject);
+            // Keep crates available for return visits. Enter again to refill.
         }
     }
 }

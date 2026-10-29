@@ -35,6 +35,7 @@ public class Level1GameManager : MonoBehaviour
 
     void Start()
     {
+        CheckpointFlag.CreateLevelFlags(transform);
         hud?.ShowMessage(
             "A/D move  |  SPACE jump  |  F throw",
             3.2f
@@ -45,6 +46,14 @@ public class Level1GameManager : MonoBehaviour
     {
         if (!LevelComplete)
             ElapsedTime += Time.deltaTime;
+
+        if (!LevelComplete && Keyboard.current != null &&
+            Keyboard.current.rKey.wasPressedThisFrame)
+        {
+            PlayerThrow player = FindAnyObjectByType<PlayerThrow>();
+            if (player != null && player.knivesRemaining <= 0)
+                player.GetComponent<PlayerHealth>()?.Kill();
+        }
 
         if (LevelComplete &&
             Keyboard.current != null &&
