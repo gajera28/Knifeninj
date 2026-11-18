@@ -5,9 +5,12 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
     public int maxHealth = 3;
+    public float knockbackDuration = 0.25f;
     public int CurrentHealth { get; private set; }
+    public bool IsRespawning => respawning;
 
     private Rigidbody2D rb;
+    private PlayerMovement movement;
     private SpriteRenderer spriteRenderer;
     private Vector3 respawnPosition;
     private bool invulnerable;
@@ -16,6 +19,7 @@ public class PlayerHealth : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        movement = GetComponent<PlayerMovement>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         CurrentHealth = maxHealth;
         respawnPosition = transform.position;
@@ -46,6 +50,7 @@ public class PlayerHealth : MonoBehaviour
             direction = 1f;
 
         rb.linearVelocity = new Vector2(direction * 4.5f, 5f);
+        movement?.StartKnockback(knockbackDuration);
         StartCoroutine(InvulnerabilityRoutine());
     }
 

@@ -21,6 +21,11 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
+    private PlayerHealth health;
+
+    // While this is above zero the player is being knocked back and
+    // movement input is ignored, so the hit push is not overwritten.
+    private float knockbackTimer;
 
     private InputAction moveAction;
     private InputAction jumpAction;
@@ -33,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        health = GetComponent<PlayerHealth>();
 
         if (playerControls == null)
         {
@@ -81,8 +87,33 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("IsGrounded", grounded);
     }
 
+    public void StartKnockback(float duration)
+    {
+        knockbackTimer = duration;
+        jumpBufferCounter = 0f;
+    }
+
     void FixedUpdate()
     {
+        // Knockback state: let the physics push play out without input.
+        if (knockbackTimer > 0f)
+        {
+            knockbackTimer -= Time.fixedDeltaTime;
+            if (animator != null)
+                animator.SetFloat("Speed", 0f);
+            return;
+        }
+
+        // Respawning: no control, and stop sideways drift.
+        if (health != null && health.IsRespawning)
+        {
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            jumpBufferCounter = 0f;
+            if (animator != null)
+                animator.SetFloat("Speed", 0f);
+            return;
+        }
+
         float horizontal = 0f;
 
         if (moveAction != null)

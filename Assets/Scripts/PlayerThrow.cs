@@ -18,6 +18,7 @@ public class PlayerThrow : MonoBehaviour
     private InputAction throwAction;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
+    private PlayerHealth health;
     private float nextThrowTime;
     private int facing = 1;
 
@@ -25,6 +26,7 @@ public class PlayerThrow : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        health = GetComponent<PlayerHealth>();
 
         if (playerControls == null)
         {
@@ -79,6 +81,14 @@ public class PlayerThrow : MonoBehaviour
 
     void ThrowKnife()
     {
+        // No throwing while respawning or once the level is finished.
+        if (health != null && health.IsRespawning)
+            return;
+
+        if (Level1GameManager.Instance != null &&
+            Level1GameManager.Instance.LevelComplete)
+            return;
+
         if (Time.time < nextThrowTime)
             return;
 
