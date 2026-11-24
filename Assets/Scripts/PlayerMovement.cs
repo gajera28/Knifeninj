@@ -33,6 +33,17 @@ public class PlayerMovement : MonoBehaviour
     private float coyoteCounter;
     private float jumpBufferCounter;
 
+    // Jump release is caught in Update (every frame) and applied in the next
+    // FixedUpdate, so a quick tap is never missed between physics steps.
+    private bool jumpCutQueued;
+
+    // Right after a jump the ground check still touches the floor for a few
+    // frames (longer on a short hop). Ignore the ground until the player stops
+    // rising, so spamming jump can't start a second jump. The time limit is
+    // only a safety cap in case something keeps the player moving up.
+    private const float groundIgnoreAfterJump = 0.5f;
+    private float groundIgnoreTimer;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -71,7 +82,16 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        bool grounded = IsGrounded();
+        if (groundIgnoreTimer > 0f)
+        {
+            groundIgnoreTimer -= Time.deltaTime;
+
+            // Stopped rising (top of the jump, or landed): ground counts again.
+            if (rb.linearVelocity.y <= 0f)
+                groundIgnoreTimer = 0f;
+        }
+
+        bool grounded = IsGrounded() && groundIgnoreTimer <= 0f;
 
         if (grounded)
             coyoteCounter = coyoteTime;
@@ -82,6 +102,9 @@ public class PlayerMovement : MonoBehaviour
             jumpBufferCounter = jumpBufferTime;
         else
             jumpBufferCounter -= Time.deltaTime;
+
+        if (jumpAction != null && jumpAction.WasReleasedThisFrame())
+            jumpCutQueued = true;
 
         if (animator != null)
             animator.SetBool("IsGrounded", grounded);
@@ -99,6 +122,7 @@ public class PlayerMovement : MonoBehaviour
         if (knockbackTimer > 0f)
         {
             knockbackTimer -= Time.fixedDeltaTime;
+            jumpCutQueued = false;
             if (animator != null)
                 animator.SetFloat("Speed", 0f);
             return;
@@ -109,6 +133,7 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
             jumpBufferCounter = 0f;
+            jumpCutQueued = false;
             if (animator != null)
                 animator.SetFloat("Speed", 0f);
             return;
@@ -135,17 +160,21 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             jumpBufferCounter = 0f;
             coyoteCounter = 0f;
+            groundIgnoreTimer = groundIgnoreAfterJump;
             KnifeNinjaAudio.Instance?.PlayJump();
         }
 
-        if (jumpAction != null &&
-            jumpAction.WasReleasedThisFrame() &&
-            rb.linearVelocity.y > 0f)
+        if (jumpCutQueued)
         {
-            rb.linearVelocity = new Vector2(
-                rb.linearVelocity.x,
-                rb.linearVelocity.y * 0.5f
-            );
+            jumpCutQueued = false;
+
+            if (rb.linearVelocity.y > 0f)
+            {
+                rb.linearVelocity = new Vector2(
+                    rb.linearVelocity.x,
+                    rb.linearVelocity.y * 0.5f
+                );
+            }
         }
     }
 
